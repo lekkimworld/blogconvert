@@ -1,0 +1,304 @@
+<?xml version="1.0" ?>
+<rss version="2.0" xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/" 
+    xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+    xmlns:wfw="http://wellformedweb.org/CommentAPI/" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/" 
+    xmlns:wp="http://wordpress.org/export/1.2/">
+  <channel>
+    <title>lekkimworld.com</title>
+    <link>http://lekkimworld.com</link>
+    <description>Blog import from lekkimworld.com</description>
+    <pubDate>Fri, 19 Feb 2018 13:36:26 +0000</pubDate>
+    <language>en</language>
+    <wp:wxr_version>1.2</wp:wxr_version>
+    <wp:base_site_url>http://wordpress.com/</wp:base_site_url>
+    <wp:base_blog_url>http://wpthemetestdata.wordpress.com</wp:base_blog_url>
+    <generator>http://lekkimworld.com/</generator>
+
+    <!-- authors -->
+    <wp:author><wp:author_id>107823713</wp:author_id><wp:author_login><![CDATA[lekkimworld]]></wp:author_login><wp:author_email><![CDATA[mikkel@heisterberg.dk]]></wp:author_email><wp:author_display_name><![CDATA[lekkim]]></wp:author_display_name><wp:author_first_name><![CDATA[Mikkel Flindt]]></wp:author_first_name><wp:author_last_name><![CDATA[Heisterberg]]></wp:author_last_name></wp:author>
+
+    <!-- categories -->
+    <wp:category>
+        <wp:term_id>10000</wp:term_id>
+        <wp:category_nicename>ibm_products</wp:category_nicename>
+        <wp:category_parent/>
+        <wp:cat_name><![CDATA[IBM Products]]></wp:cat_name>
+        <wp:category_description />
+    </wp:category>
+
+    <!-- tags -->
+    <wp:tag>
+        <wp:term_id>20000</wp:term_id>
+        <wp:tag_slug>mythtv</wp:tag_slug>
+        <wp:tag_name><![CDATA[mythtv]]></wp:tag_name>
+        <wp:tag_description><![CDATA[Tags posts about MythTV.]]></wp:tag_description>
+    </wp:tag>
+    <wp:tag>
+        <wp:term_id>20001</wp:term_id>
+        <wp:tag_slug>hauppauge</wp:tag_slug>
+        <wp:tag_name><![CDATA[hauppauge]]></wp:tag_name>
+        <wp:tag_description><![CDATA[Tags posts about Hauppauge.]]></wp:tag_description>
+    </wp:tag>
+
+    <!-- images -->
+    <image>
+		<url>https://s2.wp.com/i/buttonw-com.png</url>
+		<title> &#187; Theme Unit Test Data</title>
+		<link>http://wpthemetestdata.wordpress.com</link>
+	</image>
+
+    <item>
+        <title>Extra tuner added</title>
+        <link>http://lekkimworld.com/2004/11/25/extra_tuner_added.html</link>
+        <pubDate>Thu, 25 Nov 2004 21:14:09 +0000</pubDate>
+        <dc:creator>107823713</dc:creator>
+        <guid isPermaLink="true">http://lekkimworld.com/2004/11/25/extra_tuner_added.html</guid>
+        <description/>
+        <content:encoded><![CDATA[<p>
+I puchased an Hauppauge PVR-350 for my MythTV box so I now have a PVR-250 and a PVR-350 in the Pundit-R. Getting it in was quite a challenge and lets just say that the case has been modded a little... ;-)
+</p>
+<p>
+Getting it to work has been a little challenging. I added the extra ivtv line to /etc/modprobe.conf and once rebooted the card was detected. Great !! Only not... I got no picture - only snow. In the beginning I thought this was due to an IRQ conflict with the audio device (snd_atiixp) but it turned out not to be it. After googling a lot I found a post by a guy saying that i needed to add the following options-line to my modprobe.conf:
+<pre>
+options ivtv ivtv_std=2 tda9887=0
+</pre>
+I have no idea what is does (other than probably forcing the tuner to PAL?) but it works !! I can now record and watch tv at the same time and picture-in-picture works.
+</p>
+<p>
+Next point on the agenda will be to play with the hardware decoding video-out on the PVR-350 and to see about the heat issue that some users report. We'll have to see.
+</p>
+<p>
+For now I'm just a happy camper.
+</p>
+]]></content:encoded>
+        <excerpt:encoded><![CDATA[I purchased an extra TV tuner (Hauppauge PVR-350) for my MythTV box.]]></excerpt:encoded>
+        <wp:post_id>2</wp:post_id>
+        <wp:post_date>2004-11-25 21:14:09</wp:post_date>
+        <wp:post_date_gmt>2004-11-25 19:14:09</wp:post_date_gmt>
+        <wp:comment_status>closed</wp:comment_status>
+        <wp:ping_status>closed</wp:ping_status>
+        <wp:post_name>Extra tuner added</wp:post_name>
+        <wp:status>publish</wp:status>
+        <wp:post_parent>0</wp:post_parent>
+        <wp:menu_order>1</wp:menu_order>
+        <wp:post_type>post</wp:post_type>
+        <wp:post_password/>
+        <wp:is_sticky>0</wp:is_sticky>
+        <wp:postmeta>
+            <wp:meta_key>_wp_page_template</wp:meta_key>
+            <wp:meta_value><![CDATA[default]]></wp:meta_value>
+        </wp:postmeta>
+    </item>
+    <item>
+        <title>Small bug in LotusScript Vector class</title>
+        <link>http://lekkimworld.com/2004/11/28/small_bug_in_lotusscript_vector_class.html</link>
+        <pubDate>Sun, 28 Nov 2004 21:14:09 +0000</pubDate>
+        <dc:creator>107823713</dc:creator>
+        <guid isPermaLink="true">http://lekkimworld.com/2004/11/28/small_bug_in_lotusscript_vector_class.html</guid>
+        <description/>
+        <content:encoded><![CDATA[<p>
+The problem occurs when calling the RemoveAllElements() method since the Vector isn't reset correctly, though all elements are removed.
+</p>
+<p>
+The method should be changed from:
+<pre class="code">
+Public Sub removeAllElements()
+	Dim i As Integer
+	For i = 0 To Me.size() - 1
+		If Isobject(array(i)) Then
+			Set array(i) = Nothing
+		Else
+			array(i) = ""
+		End If
+	Next i
+End Sub
+</pre>
+to:
+<pre class="code">
+Public Sub removeAllElements()
+	Dim i As Integer
+	For i = 0 To Me.size() - 1
+		If Isobject(array(i)) Then
+			Set array(i) = Nothing
+		Else
+			array(i) = ""
+		End If
+	Next i
+	
+	'reset vector
+	elementLength = 0
+	ensureCapacity(10)
+End Sub
+</pre>
+</p>
+<p>
+I also did a simple extension of the Vector class to create a <a href="/pebble/2004/11/29/1101685467372.html">Set</a> (or "Zet" since "Set" is a reserved word in LotusScript).
+</p>]]></content:encoded>
+        <excerpt:encoded><![CDATA[I have been using the Vector class by <a href="http://dev.kanngard.net/Permalinks/ID_20020506204851.html">Johan Känngård</a> a lot lately to big satisfaction but found a bug it in on Friday.]]></excerpt:encoded>
+        <wp:post_id>3</wp:post_id>
+        <wp:post_date>2004-11-28 21:14:09</wp:post_date>
+        <wp:post_date_gmt>2004-11-28 19:14:09</wp:post_date_gmt>
+        <wp:comment_status>closed</wp:comment_status>
+        <wp:ping_status>closed</wp:ping_status>
+        <wp:post_name>Small bug in LotusScript Vector class</wp:post_name>
+        <wp:status>publish</wp:status>
+        <wp:post_parent>0</wp:post_parent>
+        <wp:menu_order>1</wp:menu_order>
+        <wp:post_type>post</wp:post_type>
+        <wp:post_password/>
+        <wp:is_sticky>0</wp:is_sticky>
+        <category domain="category" nicename="ibm_products"><![CDATA[IBM Products]]></category>
+        <wp:postmeta>
+            <wp:meta_key>_wp_page_template</wp:meta_key>
+            <wp:meta_value><![CDATA[default]]></wp:meta_value>
+        </wp:postmeta>
+    </item>
+
+    <item>
+        <title>Zet (Set) class in LotusScript</title>
+        <link>http://lekkimworld.com/2004/11/28/zet_set_class_in_lotusscript.html</link>
+        <pubDate>Sun, 28 Nov 2004 23:14:09 +0000</pubDate>
+        <dc:creator>107823713</dc:creator>
+        <guid isPermaLink="true">http://lekkimworld.com/2004/11/28/zet_set_class_in_lotusscript.html</guid>
+        <description/>
+        <content:encoded><![CDATA[<p>
+<pre class="code">
+Public Class Zet As Vector
+   'declarations
+   Private pValues As Vector
+   
+   '/**
+   ' * Constructor.
+   ' */
+   Public Sub New()
+      Set Me.pValues = New Vector()
+   End Sub
+   
+   '/**
+   ' * Adds only unique elements.
+   ' */
+   Public Sub AddElement(d As Variant)
+      'see if the vector contains this element already
+      If Not Me.pValues.Contains(d.UniversalID) Then
+         Call Vector..AddElement(d)
+         Call Me.pValues.AddElement(d.UniversalID)
+      End If
+   End Sub
+   
+   Public Function Size() As Integer
+      Size = Vector..Size()
+   End Function
+   
+   Public Function Elements() As Enumeration
+      Set Elements = Vector..Elements()
+   End Function
+   
+End Class
+</pre>
+</p>]]></content:encoded>
+        <excerpt:encoded><![CDATA[I extended the Vector class by <a href="http://dev.kanngard.net/Permalinks/ID_20020506204851.html">Johan Känngård</a> to create simple Set implementation (unique elements only). It is called "Zet" since "Set" is a reserved word in LotusScript.]]></excerpt:encoded>
+        <wp:post_id>4</wp:post_id>
+        <wp:post_date>2004-11-28 23:14:09</wp:post_date>
+        <wp:post_date_gmt>2004-11-28 21:14:09</wp:post_date_gmt>
+        <wp:comment_status>closed</wp:comment_status>
+        <wp:ping_status>closed</wp:ping_status>
+        <wp:post_name>Zet (Set) class in LotusScript</wp:post_name>
+        <wp:status>publish</wp:status>
+        <wp:post_parent>0</wp:post_parent>
+        <wp:menu_order>1</wp:menu_order>
+        <wp:post_type>post</wp:post_type>
+        <wp:post_password/>
+        <wp:is_sticky>0</wp:is_sticky>
+        <category domain="category" nicename="ibm_products"><![CDATA[IBM Products]]></category>
+        <category domain="post_tag" nicename="lotusscript"><![CDATA[lotusscript]]></category>
+        <wp:postmeta>
+            <wp:meta_key>_wp_page_template</wp:meta_key>
+            <wp:meta_value><![CDATA[default]]></wp:meta_value>
+        </wp:postmeta>
+        <wp:comment>
+			<wp:comment_id>1</wp:comment_id>
+			<wp:comment_author><![CDATA[Johan Känngård]]></wp:comment_author>
+			<wp:comment_author_email>johan_kanngard_net@heisterberg.dk</wp:comment_author_email>
+			<wp:comment_author_url>http://dev.kanngard.net</wp:comment_author_url>
+			<wp:comment_author_IP>131.116.254.200<</wp:comment_author_IP>
+			<wp:comment_date>2004-11-29 10:09:30</wp:comment_date>
+			<wp:comment_date_gmt>2004-11-29 08:09:30</wp:comment_date_gmt>
+			<wp:comment_content><![CDATA[Isn't your addElement method hardcoded for NotesDocuments, since you are using d.UniversalID? Isn't it better to override the contains (actually the indexOf) method, so that you can test if any of the UNIDs already have been added?
+Thanks for the bug report btw :-D
+]]></wp:comment_content>
+			<wp:comment_approved>1</wp:comment_approved>
+			<wp:comment_type></wp:comment_type>
+			<wp:comment_parent>0</wp:comment_parent>
+			<wp:comment_user_id>0</wp:comment_user_id>
+		</wp:comment>
+        <wp:comment>
+			<wp:comment_id>2</wp:comment_id>
+			<wp:comment_author><![CDATA[Mikkel Heisterberg]]></wp:comment_author>
+			<wp:comment_author_email>lekkim@heisterberg.dk</wp:comment_author_email>
+			<wp:comment_author_url></wp:comment_author_url>
+			<wp:comment_author_IP>180.165.22.226<</wp:comment_author_IP>
+			<wp:comment_date>2004-11-29 11:39:30</wp:comment_date>
+			<wp:comment_date_gmt>2004-11-29 09:39:30</wp:comment_date_gmt>
+			<wp:comment_content><![CDATA[Yes - probably... I did the Zet to solve a concrete problem that had to do with looping a collection multiple times and needed to capture unique documents but the code should be made generic.
+]]></wp:comment_content>
+			<wp:comment_approved>1</wp:comment_approved>
+			<wp:comment_type></wp:comment_type>
+			<wp:comment_parent>0</wp:comment_parent>
+			<wp:comment_user_id>0</wp:comment_user_id>
+		</wp:comment>
+    </item>
+
+    <item>
+        <title>Maybe I have gotten a little carried away bandwidth-wise...</title>
+        <link>http://lekkimworld.com/2005/02/27/maybe_i_have_gotten_a_little_carried_away_bandwidth_wise.html</link>
+        <pubDate>Sun, 27 Feb 2005 18:58:09 +0000</pubDate>
+        <dc:creator>107823713</dc:creator>
+        <guid isPermaLink="true">http://lekkimworld.com/2005/02/27/maybe_i_have_gotten_a_little_carried_away_bandwidth_wise.html</guid>
+        <description/>
+        <content:encoded><![CDATA[<p>
+<img src="https://lekkimworld.files.wordpress.com/2005/02/bredbaandsudbyders_mareridt.jpg" />
+</p>]]></content:encoded>
+        <excerpt:encoded><![CDATA[]]></excerpt:encoded>
+        <wp:post_id>5</wp:post_id>
+        <wp:post_date>2005-02-27 18:58:09</wp:post_date>
+        <wp:post_date_gmt>2005-02-27 16:58:09</wp:post_date_gmt>
+        <wp:comment_status>closed</wp:comment_status>
+        <wp:ping_status>closed</wp:ping_status>
+        <wp:post_name>Maybe I have gotten a little carried away bandwidth-wise...</wp:post_name>
+        <wp:status>publish</wp:status>
+        <wp:post_parent>0</wp:post_parent>
+        <wp:menu_order>1</wp:menu_order>
+        <wp:post_type>post</wp:post_type>
+        <wp:post_password/>
+        <wp:is_sticky>0</wp:is_sticky>
+        <wp:postmeta>
+            <wp:meta_key>_wp_page_template</wp:meta_key>
+            <wp:meta_value><![CDATA[default]]></wp:meta_value>
+        </wp:postmeta>
+    </item>
+
+    <item>
+		<title>images_bredbaandsudbyders_mareridt.jpg</title>
+		<link>http://lekkimworld.files.wordpress.com/migration/pebble/images/bredbaandsudbyders_mareridt.jpg</link>
+		<pubDate>Mon, 10 Jan 2011 13:20:37 +0000</pubDate>
+		<dc:creator>lekkimworld</dc:creator>
+		<guid isPermaLink="false">http://lekkimworld.files.wordpress.com/migration/pebble/images/bredbaandsudbyders_mareridt.jpg</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>7</wp:post_id>
+		<wp:post_date>2005-02-27 06:20:37</wp:post_date>
+		<wp:post_date_gmt>2005-02-27 13:20:37</wp:post_date_gmt>
+		<wp:comment_status>open</wp:comment_status>
+		<wp:ping_status>closed</wp:ping_status>
+		<wp:post_name>images_bredbaandsudbyders_mareridt.jpg</wp:post_name>
+		<wp:status>inherit</wp:status>
+		<wp:post_parent>555</wp:post_parent>
+		<wp:menu_order>0</wp:menu_order>
+		<wp:post_type>attachment</wp:post_type>
+		<wp:post_password></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:attachment_url>http://lekkimworld.com/images/bredbaandsudbyders_mareridt.jpg</wp:attachment_url>
+	</item>
+</rss>
