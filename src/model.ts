@@ -8,16 +8,15 @@ export class Tag {
 }
 export class Post {
     readonly title : string
-    readonly body : string
+    body : string
     readonly excerpt : string
     readonly date : moment.Moment
     readonly tags : Tag[] = []
     readonly postImages : PostImage[] = []
 
-    constructor(title : string, excerpt : string, body : string, date : moment.Moment) {
+    constructor(title : string, excerpt : string, date : moment.Moment) {
         this.title = title
         this.excerpt = excerpt
-        this.body = body
         this.date = date
     }
     addPostImage(img : PostImage) : Post {
@@ -30,12 +29,15 @@ export class Post {
     }
 }
 export class PostImage {
-    readonly url : string
+    readonly oldUrl : string
+    readonly newUrl : string
     readonly path : string
-
-    constructor(url : string, path : string) {
-        this.url = url
+    readonly name : string
+    constructor(path : string, oldUrl : string, newUrl : string) {
+        this.oldUrl = oldUrl
+        this.newUrl = newUrl
         this.path = path
+        this.name = path.split('/').slice(-1)[0]
     }
 }
 
