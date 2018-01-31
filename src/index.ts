@@ -4,8 +4,11 @@ import * as moment from 'moment'
 import * as model from './model'
 import { PostImage } from './model';
 import { exists } from 'fs';
+const DEVELOPING : boolean = true
+const DEVELOPING_CONTENT_KEY : string = (new Date().getTime() + '')
 const BLOG_CREATOR_ID : string = '107823713'
 const BLOG_CREATOR_EMAIL : string = 'mikkel@heisterberg.dk'
+const BLOG_CREATOR_WEBSITE : string = 'http://lekkimworld.com'
 const BLOG_CREATOR_LOGIN : string = 'lekkimworld'
 const BLOG_CREATOR_DISPNAME : string = 'lekkim'
 const BLOG_CREATOR_FN : string = 'Mikkel Flindt'
@@ -16,12 +19,15 @@ const uuid : any = require('uuid/v1')
 
 let blogCounter : number = 0
 let blogError : Error[] = []
-let postImage : number = 0
+let commentCounter : number = 0
 let imageCounter : number = 0
 let fileCounter : number = 0
 let posts : model.Post[] = []
 let postImages : model.PostImage[] = []
-let findOrCreatePostImage = function(path : string, postDate : moment.Moment) : model.PostImage {
+const parseDate = function(date : string) : moment.Moment {
+    return moment(date, 'DD MMM YYYY HH:mm:ss:SSS Z')
+} 
+const findOrCreatePostImage = function(path : string, postDate : moment.Moment) : model.PostImage {
     // see if we have an image for this path already
     let existing : model.PostImage = postImages.reduce((prev : model.PostImage, current : model.PostImage) : model.PostImage => {
         if (prev) return prev
@@ -81,15 +87,38 @@ walk(basepath, {
                     if (tags && tags.length) return tags.split(' ')
                     return []
                 })(etree.findtext('./tags'))
-                const date : moment.Moment = moment(etree.findtext('./date'), 'DD MMM YYYY HH:mm:ss:SSS Z')
+                const date : moment.Moment = parseDate(etree.findtext('./date'))
+
+                // look for comments
+                const comments : model.PostComment[] = (function(comments) : model.PostComment[] {
+                    if (!comments || !comments.length) return []
+                    let result : model.PostComment[] = comments.reduce((prev : model.PostComment[], c : any) : model.PostComment[] => {
+                        let title : string = c.findtext('./title')
+                        let author : string = c.findtext('./author')
+                        let email : string = c.findtext('./email')
+                        let website : string = c.findtext('./website')
+                        let ip : string = c.findtext('./ipAddress')
+                        let date : moment.Moment = parseDate(c.findtext('./date'))
+                        let state : string = c.findtext('./state')
+                        let body : string = c.findtext('./body')
+                        if (state === 'approved') {
+                            // create comment object to post
+                            let comment = new model.PostComment(title, author, email, website, ip, date, state, body)
+                            prev.push(comment)
+                        }
+                        return prev
+                    }, [])
+                    return result
+                })(etree.findall('./comment'))
+                commentCounter += comments.length
 
                 // create post object
                 let post : model.Post = new model.Post(title, excerpt, date)
                 tags.forEach(t => post.addTag(new model.Tag(t)))
+                comments.forEach(c => post.addComment(c))
                 
                 // process internal links and image links in posts
                 let result : RegExpExecArray
-                
 
                 // look for internal links
                 const internalLinkRegex = /<a href="((?:http:\/\/lekkimworld.com|.)?(\/(?:files|images)[-_.\/\w\d]+))"/gm
@@ -137,8 +166,8 @@ walk(basepath, {
     cb()
 
 }).then(() => {
-    console.log(`Post counter: ${blogCounter}`)
-    console.log(`Post images: ${postImage}`)
+    console.log(`Posts counter: ${blogCounter}`)
+    console.log(`Comments counter: ${commentCounter}`)
     console.log(`Blog errors: ${blogError.length}`)
     console.log(`File counter: ${fileCounter}`)
     console.log(`Image counter: ${imageCounter}`)
@@ -176,8 +205,8 @@ walk(basepath, {
         // add posts
         posts.forEach((post, idx) => {
             // write resulting Wordpress blog post
-            const xml = `<item>
-                <title>${post.title} ${new Date().getTime()}</title>
+            xmlStream.write(`<item>
+                <title>${post.title + (DEVELOPING ? DEVELOPING_CONTENT_KEY : '')}</title>
                 <pubDate>${post.pubDate}</pubDate>
                 <dc:creator>${BLOG_CREATOR_ID}</dc:creator>
                 <description/>
@@ -199,9 +228,30 @@ walk(basepath, {
                     <wp:meta_key>_wp_page_template</wp:meta_key>
                     <wp:meta_value><![CDATA[default]]></wp:meta_value>
                 </wp:postmeta>
-            </item>
-            `
-            xmlStream.write(xml)
+            `)
+
+            // add comments
+            post.comments.forEach(c => {
+                xmlStream.write(`<wp:comment>
+                <wp:comment_id>${uuid()}</wp:comment_id>
+                <wp:comment_author><![CDATA[${c.author}]]></wp:comment_author>
+                <wp:comment_author_email>${DEVELOPING ? BLOG_CREATOR_EMAIL : c.email}</wp:comment_author_email>
+                <wp:comment_author_url>${c.website ? c.website : BLOG_CREATOR_WEBSITE}</wp:comment_author_url>
+                <wp:comment_author_IP>${c.ip}</wp:comment_author_IP>
+                <wp:comment_date>${c.postDate}</wp:comment_date>
+                <wp:comment_date_gmt>${c.postDateUtc}</wp:comment_date_gmt>
+                <wp:comment_content><![CDATA[${c.body}]]></wp:comment_content>
+                <wp:comment_approved>1</wp:comment_approved>
+                <wp:comment_type></wp:comment_type>
+                <wp:comment_parent>0</wp:comment_parent>
+                <wp:comment_user_id>${c.email ? '0' : BLOG_CREATOR_ID}</wp:comment_user_id>
+                </wp:comment>
+                `)
+            })
+
+            // close item
+            xmlStream.write(`</item>
+            `)
         })
         
         // add post images

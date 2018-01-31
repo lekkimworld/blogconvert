@@ -24,15 +24,15 @@ export class Post extends DateObject {
     body : string
     readonly excerpt : string
     readonly tags : Tag[] = []
-    readonly postImages : PostImage[] = []
+    readonly comments : PostComment[] = []
 
     constructor(title : string, excerpt : string, date : moment.Moment) {
         super(date)
         this.title = title
         this.excerpt = excerpt
     }
-    addPostImage(img : PostImage) : Post {
-        this.postImages.push(img)
+    addComment(c : PostComment) : Post {
+        this.comments.push(c)
         return this
     }
     addTag(tag : Tag) : Post {
@@ -53,4 +53,23 @@ export class PostImage extends DateObject {
         this.name = path.split('/').slice(-1)[0]
     }
 }
+export class PostComment extends DateObject {
+    readonly title : string
+    readonly author : string
+    readonly email : string
+    readonly website : string
+    readonly ip : string
+    readonly state : string
+    readonly body : string
 
+    constructor(title : string, author : string, email : string, website : string, ip : string, date : moment.Moment, state : string, body : string) {
+        super(date)
+        this.title = title
+        this.author = author
+        this.email = email
+        this.website = website
+        this.ip = ip
+        this.state = state
+        this.body = body
+    }
+}
