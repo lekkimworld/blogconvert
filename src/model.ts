@@ -6,18 +6,30 @@ export class Tag {
         this.name = name
     }
 }
-export class Post {
+class DateObject {
+    readonly date : moment.Moment
+    readonly pubDate : string
+    readonly postDate : string
+    readonly postDateUtc : string
+
+    constructor(date : moment.Moment) {
+        this.date = date
+        this.pubDate = date.format('ddd, DD MMM YYYY HH:mm:ss Z')
+        this.postDate = date.format('YYYY-MM-DD HH:mm:ss')
+        this.postDateUtc = date.utc().format('YYYY-MM-DD HH:mm:ss')
+    }
+}
+export class Post extends DateObject {
     readonly title : string
     body : string
     readonly excerpt : string
-    readonly date : moment.Moment
     readonly tags : Tag[] = []
     readonly postImages : PostImage[] = []
 
     constructor(title : string, excerpt : string, date : moment.Moment) {
+        super(date)
         this.title = title
         this.excerpt = excerpt
-        this.date = date
     }
     addPostImage(img : PostImage) : Post {
         this.postImages.push(img)
@@ -28,12 +40,13 @@ export class Post {
         return this
     }
 }
-export class PostImage {
+export class PostImage extends DateObject {
     readonly oldUrl : string
     readonly newUrl : string
     readonly path : string
     readonly name : string
-    constructor(path : string, oldUrl : string, newUrl : string) {
+    constructor(path : string, oldUrl : string, newUrl : string, date : moment.Moment) {
+        super(date)
         this.oldUrl = oldUrl
         this.newUrl = newUrl
         this.path = path
