@@ -4,7 +4,7 @@ import * as moment from 'moment'
 import * as model from './model'
 import { PostImage } from './model';
 import { exists } from 'fs';
-const DEVELOPING : boolean = true
+const DEVELOPING : boolean = false
 const DEVELOPING_CONTENT_KEY : string = (new Date().getTime() + '')
 const BLOG_CREATOR_ID : string = '107823713'
 const BLOG_CREATOR_EMAIL : string = 'mikkel@heisterberg.dk'
@@ -189,14 +189,14 @@ walk(basepath, {
             xmlns:wp="http://wordpress.org/export/1.2/">
           <channel>
             <title>lekkimworld.com</title>
-            <link>http://lekkimworld.com</link>
-            <description>Blog import from lekkimworld.com</description>
+            <link>${BLOG_CREATOR_WEBSITE}</link>
+            <description>Blog import from ${BLOG_CREATOR_WEBSITE}</description>
             <pubDate>Fri, 19 Feb 2018 13:36:26 +0000</pubDate>
             <language>en</language>
             <wp:wxr_version>1.2</wp:wxr_version>
             <wp:base_site_url>http://wordpress.com/</wp:base_site_url>
             <wp:base_blog_url>http://wpthemetestdata.wordpress.com</wp:base_blog_url>
-            <generator>http://lekkimworld.com/</generator>
+            <generator>${BLOG_CREATOR_WEBSITE}</generator>
         
             <!-- authors -->
             <wp:author><wp:author_id>${BLOG_CREATOR_ID}</wp:author_id><wp:author_login><![CDATA[${BLOG_CREATOR_LOGIN}]]></wp:author_login><wp:author_email><![CDATA[${BLOG_CREATOR_EMAIL}]]></wp:author_email><wp:author_display_name><![CDATA[${BLOG_CREATOR_DISPNAME}]]></wp:author_display_name><wp:author_first_name><![CDATA[${BLOG_CREATOR_FN}]]></wp:author_first_name><wp:author_last_name><![CDATA[${BLOG_CREATOR_LN}]]></wp:author_last_name></wp:author>
@@ -229,6 +229,12 @@ walk(basepath, {
                     <wp:meta_value><![CDATA[default]]></wp:meta_value>
                 </wp:postmeta>
             `)
+
+            // add tags
+            post.tags.forEach(t => {
+                xmlStream.write(`<category domain="post_tag" nicename="${t.name}"><![CDATA[${t.name}]]></category>
+                `)
+            })
 
             // add comments
             post.comments.forEach(c => {
