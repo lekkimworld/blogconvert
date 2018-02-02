@@ -3,9 +3,12 @@ import * as path from 'path'
 import * as moment from 'moment'
 import * as model from './model'
 import { PostImage } from './model';
-import { exists } from 'fs';
+import { exists, WriteStream } from 'fs';
+import { Agent } from 'http'
+
 const DEVELOPING : boolean = false
 const DEVELOPING_CONTENT_KEY : string = (new Date().getTime() + '')
+const ADD_ATTACHMENTS_TO_RESULT : boolean = false
 const BLOG_CREATOR_ID : string = '107823713'
 const BLOG_CREATOR_EMAIL : string = 'mikkel@heisterberg.dk'
 const BLOG_CREATOR_WEBSITE : string = 'http://lekkimworld.com'
@@ -16,6 +19,7 @@ const BLOG_CREATOR_LN : string = 'Heisterberg'
 const walk : any = require('walk-folder-tree')
 const et : any = require('elementtree')
 const uuid : any = require('uuid/v1')
+const fetch : any = require('node-fetch')
 
 let blogCounter : number = 0
 let blogError : Error[] = []
@@ -24,6 +28,7 @@ let imageCounter : number = 0
 let fileCounter : number = 0
 let posts : model.Post[] = []
 let postImages : model.PostImage[] = []
+
 const parseDate = function(date : string) : moment.Moment {
     return moment(date, 'DD MMM YYYY HH:mm:ss:SSS Z')
 } 
@@ -37,14 +42,18 @@ const findOrCreatePostImage = function(path : string, postDate : moment.Moment) 
     if (!existing) {
         // not found - create and return
         let filename = path.split('/').slice(-1)[0]
-        let newUrl : string = `https://lekkimworld.files.wordpress.com/${postDate.year()}/${postDate.month() < 9 ? '0' + (postDate.month()+1) : (postDate.month()+1)}/${filename}`
+        //let year : string = postDate.year()
+        //let month : string = postDate.month() < 9 ? '0' + (postDate.month()+1) : (postDate.month()+1)
+        let year : string = '2018'
+        let month : string = '02'
+        let newUrl : string = `https://lekkimworld.files.wordpress.com/${year}/${month}/${filename}`
         let oldUrl : string = `http://lekkimworld.com${path}`
         existing = new model.PostImage(path, oldUrl, newUrl, postDate)
         postImages.push(existing)
     }
     return existing
 }
-const basepath = "/Users/mheisterberg/Downloads/lekkimworld-backup-20170908"
+const basepath = "/Users/mheisterberg/Downloads/lekkimworld-20180201"
 
 walk(basepath, {
     
@@ -178,7 +187,7 @@ walk(basepath, {
         if (exists) fs.unlinkSync(resultPath)
         
         // create output stream
-        let xmlStream : fs.WriteStream = fs.createWriteStream(resultPath)
+    let xmlStream : WriteStream = fs.createWriteStream(resultPath)
 
         // start document
         xmlStream.write(`<?xml version="1.0" ?>
@@ -259,37 +268,42 @@ walk(basepath, {
             xmlStream.write(`</item>
             `)
         })
-        
-        // add post images
-        postImages.forEach(img => {
-            const xml = `<item>
-                <title>${img.name}</title>
-                <link>${img.oldUrl}</link>
-                <pubDate>${img.pubDate}</pubDate>
-                <dc:creator>${BLOG_CREATOR_ID}</dc:creator>
-                <guid isPermaLink="false">${img.newUrl}</guid>
-                <description></description>
-                <wp:post_id>${uuid()}</wp:post_id>
-                <wp:post_date>${img.postDate}</wp:post_date>
-                <wp:post_date_gmt>${img.postDateUtc}</wp:post_date_gmt>
-                <wp:comment_status>closed</wp:comment_status>
-                <wp:ping_status>closed</wp:ping_status>
-                <wp:post_name>${img.name}</wp:post_name>
-                <wp:status>publish</wp:status>
-                <wp:post_parent>0</wp:post_parent>
-                <wp:menu_order>1</wp:menu_order>
-                <wp:post_type>attachment</wp:post_type>
-                <wp:post_password/>
-                <wp:is_sticky>0</wp:is_sticky>
-                <wp:attachment_url>${img.oldUrl}</wp:attachment_url>
-            </item>
-            `
-            xmlStream.write(xml)
-        })
+
+        if (ADD_ATTACHMENTS_TO_RESULT) {
+            // add post images
+            postImages.forEach(img => {
+                if (img.path === '/images/polar_example.png') return
+
+                const xml = `<item>
+                    <title>${img.name}</title>
+                    <link>${img.oldUrl}</link>
+                    <pubDate>${img.pubDate}</pubDate>
+                    <dc:creator>${BLOG_CREATOR_ID}</dc:creator>
+                    <guid isPermaLink="false">${img.newUrl}</guid>
+                    <description></description>
+                    <wp:post_id>${uuid()}</wp:post_id>
+                    <wp:post_date>${img.postDate}</wp:post_date>
+                    <wp:post_date_gmt>${img.postDateUtc}</wp:post_date_gmt>
+                    <wp:comment_status>closed</wp:comment_status>
+                    <wp:ping_status>closed</wp:ping_status>
+                    <wp:post_name>${img.name}</wp:post_name>
+                    <wp:status>publish</wp:status>
+                    <wp:post_parent>0</wp:post_parent>
+                    <wp:menu_order>1</wp:menu_order>
+                    <wp:post_type>attachment</wp:post_type>
+                    <wp:post_password/>
+                    <wp:is_sticky>0</wp:is_sticky>
+                    <wp:attachment_url>${img.oldUrl}</wp:attachment_url>
+                </item>
+                `
+                xmlStream.write(xml)
+            })
+        }
 
         // close document and stream
         xmlStream.write('</rss>\n')
         xmlStream.close()
     })
 
+    
 })
